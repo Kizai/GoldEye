@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoldEye</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="loader">👁️ 正在加载东方财富实时黄金行情...</div>
+      <iframe
+        id="goldframe"
+        frameborder="0"
+        scrolling="auto"
+        onload="document.getElementById('loader').style.display = 'none'"
+      >
+      </iframe>
+      <div id="refresh-timer">
+        <span id="timer-text">下次刷新: 5:00</span>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

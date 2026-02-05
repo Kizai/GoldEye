@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoldEye 设置</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>⚙️ GoldEye 设置</h1>
+      <p class="subtitle">自定义您想要查看的行情页面</p>
+    </div>
+
+    <div class="settings-card">
+      <div class="form-group">
+        <label for="custom-url">
+          <span class="label-text">📊 行情页面 URL</span>
+          <span class="label-desc">输入您想要显示的东方财富网或其他金融网站的URL</span>
+        </label>
+        <input 
+          type="url" 
+          id="custom-url" 
+          placeholder="https://quote.eastmoney.com/q/122.XAU.html"
+          spellcheck="false"
+        >
+      </div>
+
+      <div class="preset-urls">
+        <p class="preset-title">🔖 快速选择</p>
+        <div class="preset-buttons">
+          <button class="preset-btn" data-url="https://quote.eastmoney.com/q/122.XAU.html">
+            黄金 (XAU)
+          </button>
+          <button class="preset-btn" data-url="https://quote.eastmoney.com/q/122.XAG.html">
+            白银 (XAG)
+          </button>
+          <button class="preset-btn" data-url="https://quote.eastmoney.com/center/gridlist.html#futures_cffex">
+            期货行情
+          </button>
+          <button class="preset-btn" data-url="https://quote.eastmoney.com/center/gridlist.html#forex_fx">
+            外汇行情
+          </button>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button id="save-btn" class="btn btn-primary">💾 保存设置</button>
+        <button id="reset-btn" class="btn btn-secondary">🔄 恢复默认</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <div class="footer">
+      <p>💡 提示：设置保存后，点击插件图标即可查看您自定义的页面</p>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
