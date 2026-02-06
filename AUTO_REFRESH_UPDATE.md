@@ -1,120 +1,51 @@
-# 自动刷新功能更新 🔄
+# 自动刷新与倒计时（网页区域）⏱️
 
-## 更新内容
+## 目标
 
-GoldEye 插件现在支持**自动刷新功能**，完全同步东方财富网站的更新机制！
+popup 里 iframe 展示网页时，为了保证页面内容不会长期停留在旧状态，需要一个“可控的刷新机制”：
 
-### ✨ 新功能特性
+- **网页区域（iframe）**：定期刷新（当前为 5 分钟一次）
+- **倒计时提示**：底部显示距离下次网页刷新还有多久
 
-1. **60秒自动刷新**
-   - 与东方财富网站的刷新频率完全同步
-   - 每60秒自动重新加载页面数据
+注意：网页区域刷新不等于报价实时更新。报价的“每秒变化”由顶部实时行情条负责，详见 `REALTIME_UPDATE_FIX.md`。
 
-2. **可视化倒计时**
-   - 插件底部显示金色渐变倒计时条
-   - 实时显示距离下次刷新的剩余秒数
-   - 例如："45秒后自动刷新"
+## 当前策略
 
-3. **刷新状态提示**
-   - 刷新时显示"正在刷新..."提示
-   - 让用户清楚知道更新状态
+1. **倒计时每秒更新**（只更新文本，不触发刷新）
+2. **到点刷新 iframe**（reload 一次）
+3. **切换 URL 时重置倒计时**（避免换页面后还沿用旧倒计时）
 
-## 🎨 界面变化
+## 实现片段（示意）
 
-### 倒计时条样式
+```js
+const IFRAME_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
+let nextIframeRefreshAt = Date.now() + IFRAME_REFRESH_INTERVAL_MS;
 
-- **位置**: 弹窗底部
-- **高度**: 24px
-- **背景**: 金色渐变（#d4af37 → #f2d06b）
-- **效果**: 与"金眼"主题完美匹配
-
-![倒计时效果示意](示意图：底部金色渐变条，显示"XX秒后自动刷新")
-
-## 📝 技术实现
-
-### 修改的文件
-
-#### 1. `popup.html`
-
-```html
-<!-- 新增倒计时显示元素 -->
-<div id="refresh-timer">
-  <span id="timer-text">60秒后自动刷新</span>
-</div>
-```
-
-#### 2. `popup.css`
-
-```css
-/* iframe高度调整，为倒计时条留出空间 */
-iframe {
-  height: calc(100% - 24px);
+function resetIframeRefreshSchedule() {
+  nextIframeRefreshAt = Date.now() + IFRAME_REFRESH_INTERVAL_MS;
 }
 
-/* 金色渐变倒计时条 */
-#refresh-timer {
-  height: 24px;
-  background: linear-gradient(135deg, #d4af37 0%, #f2d06b 100%);
+function getRemainingSeconds() {
+  return Math.max(0, Math.ceil((nextIframeRefreshAt - Date.now()) / 1000));
 }
-```
 
-#### 3. `popup.js`
-
-```javascript
-// 60秒倒计时逻辑
-let countdown = 60;
-
-// 每秒更新显示
-setInterval(updateTimer, 1000);
-
-// 每60秒刷新iframe
 setInterval(() => {
-  frame.contentWindow.location.reload();
-}, 60000);
+  timerText.textContent =
+    getRemainingSeconds() > 0 ? `网页下次刷新: ...` : '网页正在刷新...';
+}, 1000);
+
+setInterval(() => {
+  resetIframeRefreshSchedule();
+  reloadIframe(frame);
+}, IFRAME_REFRESH_INTERVAL_MS);
 ```
 
-## 🔍 同步机制说明
+## 为什么不放到 iframe.onload 里？
 
-根据对东方财富网站的分析：
+iframe 每次 reload 都会触发 `onload`。如果在 `onload` 里再 `setInterval`，就会产生“定时器叠加”，导致：
 
-- 网站使用 **JavaScript AJAX 轮询**
-- 刷新间隔：**60秒**
-- 数据源：`push2.eastmoney.com/api/qt/clist/get`
+- 倒计时越跑越快
+- 刷新频率异常
 
-GoldEye 插件完全匹配这个机制，确保数据始终保持最新！
+所以倒计时/刷新定时器只初始化一次，放在 `DOMContentLoaded` 里。
 
-## 🚀 如何体验
-
-1. **重新加载插件**
-   - 打开 `chrome://extensions/`
-   - 找到 GoldEye 插件
-   - 点击 🔄 刷新按钮
-
-2. **打开插件**
-   - 点击工具栏的金色眼睛图标
-   - 查看底部的倒计时条
-   - 等待60秒，观察自动刷新
-
-3. **验证效果**
-   - 倒计时从60秒开始递减
-   - 到0秒时显示"正在刷新..."
-   - iframe内容自动更新
-   - 倒计时重置为60秒
-
-## 📊 性能说明
-
-- **内存占用**: 极低（仅定时器）
-- **CPU占用**: 忽略不计
-- **网络请求**: 每60秒一次iframe reload
-- **用户体验**: 无感知刷新，不影响浏览
-
-## 🎯 总结
-
-现在 GoldEye 插件提供了：
-✅ **实时金价展示**  
-✅ **自动刷新（60秒）**  
-✅ **可视化倒计时**  
-✅ **与官网同步**  
-✅ **精美的界面设计**
-
-完全实现了"金价小窗 + 极速查看 + 自动更新"的功能目标！🎉

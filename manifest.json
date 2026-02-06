@@ -4,6 +4,7 @@
   "version": "1.1",
   "description": "轻量级黄金行情浏览器插件，一键查看实时金价。支持自定义URL。",
   "permissions": ["activeTab", "tabs", "storage", "contextMenus"],
+  "host_permissions": ["https://push2.eastmoney.com/*", "https://quote.eastmoney.com/*"],
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": {

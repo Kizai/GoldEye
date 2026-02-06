@@ -10,26 +10,32 @@ body {
 #wrapper {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#content {
   position: relative;
+  flex: 1;
+  min-height: 0;
 }
 #loader {
   position: absolute;
-  top: 45%;
-  width: 100%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   color: #888;
   font-size: 13px;
+  padding: 12px;
 }
 iframe {
   width: 100%;
-  height: calc(100% - 24px);
+  height: 100%;
   display: block;
+  border: 0;
 }
 #refresh-timer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   height: 24px;
   background: linear-gradient(135deg, #d4af37 0%, #f2d06b 100%);
   display: flex;
@@ -43,4 +49,76 @@ iframe {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.3px;
+}
+
+.live-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3c4 100%);
+  border-bottom: 1px solid #ead48d;
+}
+
+.live-bar.hidden {
+  display: none;
+}
+
+.live-left {
+  display: flex;
+  flex-direction: column;
+  min-width: 88px;
+}
+
+.live-symbol {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2c2416;
+  letter-spacing: 0.3px;
+}
+
+.live-name {
+  font-size: 11px;
+  color: #6a5a3a;
+}
+
+.live-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 1;
+}
+
+.live-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2c2416;
+  line-height: 1.1;
+}
+
+.live-move {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6a5a3a;
+}
+
+.live-time {
+  font-size: 10px;
+  color: #6a5a3a;
+}
+
+.live-bar.up .live-price,
+.live-bar.up .live-change,
+.live-bar.up .live-pct {
+  color: #d9363e;
+}
+
+.live-bar.down .live-price,
+.live-bar.down .live-change,
+.live-bar.down .live-pct {
+  color: #2db55d;
 }

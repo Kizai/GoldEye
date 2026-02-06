@@ -8,14 +8,26 @@
   </head>
   <body>
     <div id="wrapper">
-      <div id="loader">👁️ 正在加载东方财富实时黄金行情...</div>
-      <iframe
-        id="goldframe"
-        frameborder="0"
-        scrolling="auto"
-        onload="document.getElementById('loader').style.display = 'none'"
-      >
-      </iframe>
+      <div id="live-bar" class="live-bar hidden" aria-hidden="true">
+        <div class="live-left">
+          <div class="live-symbol" id="live-symbol">--</div>
+          <div class="live-name" id="live-name">实时行情</div>
+        </div>
+        <div class="live-right">
+          <div class="live-price" id="live-price">--</div>
+          <div class="live-move">
+            <span class="live-change" id="live-change">--</span>
+            <span class="live-pct" id="live-pct">--</span>
+          </div>
+          <div class="live-time" id="live-time">--</div>
+        </div>
+      </div>
+
+      <div id="content">
+        <div id="loader">👁️ 正在加载行情页面...</div>
+        <iframe id="goldframe" frameborder="0" scrolling="auto"></iframe>
+      </div>
+
       <div id="refresh-timer">
         <span id="timer-text">下次刷新: 5:00</span>
       </div>
